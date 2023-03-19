@@ -6,11 +6,13 @@ Este es nuestro archivo de controlador principal. Será responsable de manejar l
 import pygame as pygame
 from Chess import ChessEngine
 
-Board_width = Board_height = 800
-MoveLogPanelWidth = 250
+Board_width = Board_height = 710
+MoveLogPanelWidth = 300
 MoveLogPanelHeight = Board_height
+keyboardactionsWitdth = Board_height
+keyboardactionHeight = 100
 dimension = 8  # Dimensión del tablero.
-sq_Size = 800// dimension  # Dimensiones de las casillas.
+sq_Size = 710 // dimension  # Dimensiones de las casillas.
 max_fps = 60  # Para las animaciones.
 images = {}
 
@@ -36,9 +38,10 @@ def main():
     pygame.init()
     fullscreen = False
     if fullscreen:
-        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height), pygame.FULLSCREEN)
+        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight),
+                                         pygame.FULLSCREEN)
     else:
-        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height))
+        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight))
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("white"))
     moveLogFont = pygame.font.SysFont("Helvetica", 15, False, False)
@@ -66,6 +69,7 @@ def main():
                             col) or col >= 8:  # this is for verification if the user puts the same location or square
                         sqSelected = ()  # deselect
                         playerClicks = []  # clear the player click
+
                     else:
                         sqSelected = (row, col)
                         playerClicks.append(sqSelected)  # append for both 1st and  2nd clicks
@@ -102,14 +106,16 @@ def main():
 
                 if e.key == pygame.K_e:
                     print("salir")
-                    from Chess.Forms.form_login import FormLogin
                     pygame.display.quit()
-                    FormLogin()
+                    pygame.quit()
+                    from Chess.util.ChessToMenu import ChessToMenu
+                    ChessToMenu()
 
                 if e.key == pygame.K_F11:
                     fullscreen = not fullscreen
                     if fullscreen:
-                        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height), pygame.FULLSCREEN)
+                        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height),
+                                                         pygame.FULLSCREEN)
                         moveLogFont = pygame.font.SysFont("Helvetica", 20, False, False)
                     else:
                         screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height))
@@ -148,6 +154,7 @@ def drawGameState(screen, gs, validMoves, sqSelected, moveLogFont):
     highlightSquares(screen, gs, validMoves, sqSelected)
     drawPieces(screen, gs.board)
     drawMoveLog(screen, gs, moveLogFont)
+    drawkeyboardactions(screen, gs, moveLogFont)
 
 
 '''
@@ -172,6 +179,7 @@ def highlightSquares(screen, gs, validMoves, sqSelected):
 '''
 Draw the squares on the board. the top square is always  light
 '''
+
 
 def drawBoard(screen):
     global colors
@@ -200,11 +208,55 @@ Draws the move log
 '''
 
 
+def drawkeyboardactions(screen, gs, font):
+    keyboardRect = pygame.Rect(0, Board_height, keyboardactionsWitdth, keyboardactionHeight)
+    pygame.draw.rect(screen, pygame.Color("black"), keyboardRect)
+    mensaje1 = 'Retroceder un movimiento: Tecla "Z"'
+    mensaje2 = 'Reiniciar juego: Tecla "R"'
+    mensaje3 = 'salir del juego: Tecla "E"'
+
+    textObject1 = font.render(mensaje1, True, pygame.Color('white'))
+    textObject2 = font.render(mensaje2, True, pygame.Color('white'))
+    textObject3 = font.render(mensaje3, True, pygame.Color('white'))
+
+    padding = 10
+    movesPerRow = 3
+    textY = padding
+    lineSpacing = 10
+
+    screen.blit(textObject1, keyboardRect.move(padding, textY))
+    textY += textObject1.get_height() + lineSpacing
+    screen.blit(textObject2, keyboardRect.move(padding, textY))
+    textY += textObject2.get_height() + lineSpacing
+    screen.blit(textObject3, keyboardRect.move(padding, textY))
+    textY += textObject3.get_height() + lineSpacing
+
+
 def drawMoveLog(screen, gs, font):
-    moveLogRect = pygame.Rect(Board_width, 0, MoveLogPanelWidth, MoveLogPanelHeight)
+    moveLogRect = pygame.Rect(Board_width, 0, MoveLogPanelWidth, MoveLogPanelHeight + keyboardactionHeight)
     pygame.draw.rect(screen, pygame.Color("black"), moveLogRect)
     moveLog = gs.moveLog
     moveTexts = []
+
+    mensaje1 = "¡Bienvenido al registro de movimientos!"
+    mensaje2 = "Aquí se mostrarán los movimientos realizados."
+    mensaje3 = "Haz clic en una pieza y luego en un movimiento válido para registrar tu jugada."
+
+    textObject1 = font.render(mensaje1, True, pygame.Color('white'))
+    textObject2 = font.render(mensaje2, True, pygame.Color('white'))
+    textObject3 = font.render(mensaje3, True, pygame.Color('white'))
+
+    padding = 10
+    movesPerRow = 3
+    textY = padding
+    lineSpacing = 10
+
+    screen.blit(textObject1, moveLogRect.move(padding, textY))
+    textY += textObject1.get_height() + lineSpacing
+    screen.blit(textObject2, moveLogRect.move(padding, textY))
+    textY += textObject2.get_height() + lineSpacing
+    screen.blit(textObject3, moveLogRect.move(padding, textY))
+    textY += textObject3.get_height() + lineSpacing
 
     for i in range(0, len(moveLog), 2):
         moveString = str(i // 2 + 1) + ".- " + str(moveLog[i]) + "  "
@@ -212,10 +264,6 @@ def drawMoveLog(screen, gs, font):
             moveString += str(moveLog[i + 1]) + "  "
         moveTexts.append(moveString)
 
-    padding = 5
-    movesPerRow = 2
-    textY = padding
-    lineSpacing = 2
     for i in range(0, len(moveTexts), movesPerRow):
         text = ""
         for j in range(movesPerRow):

@@ -1,8 +1,9 @@
 
 
-from Chess.ChessMain import innit
+
 from tkinter import messagebox, END
 from Chess.prueba import Prueba
+from Chess.Forms.form_menu_desinger import menu
 from Chess.persistence.auth_user_repository import AuthUserRepositroy
 import Chess.util.encoding_decoding as end_dec
 from Chess.persistence.model import Auth_User
@@ -37,9 +38,7 @@ class FormLogin(FormLoginDesigner):
         b_password = end_dec.decrypt(user.password)
         if (password == b_password):
             self.ventana.destroy()
-            filename = 'C:\\proyectoChess\\Chess\\video.mp4'
-            #innit()
-            Prueba(filename)
+            menu()
         else:
             messagebox.showerror(
                 message="La contraseña no es correcta", title="Mensaje")

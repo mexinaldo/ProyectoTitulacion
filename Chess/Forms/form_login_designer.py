@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
 from tkinter.font import BOLD
 import Chess.util.generic as utl
+
 
 class FormLoginDesigner:
 
@@ -19,8 +20,9 @@ class FormLoginDesigner:
 
         utl.centrar_ventana(self.ventana, 800, 500)
 
-        logo = utl.leer_imagen("C:\proyectoChess\Chess\images\logo.png", (712, 508))
+        logo = utl.leer_imagen("C:\\proyectoChess\\Chess\\images\\logo.png", (712, 508))
         # frame_logo
+
         frame_logo = tk.Frame(self.ventana, bd=0, width=300, relief=tk.SOLID, padx=10, pady=10, bg='#000000')
         frame_logo.pack(side="left", expand=tk.YES, fill=tk.BOTH)
         label = tk.Label(frame_logo, image=logo, bg='#000000')
