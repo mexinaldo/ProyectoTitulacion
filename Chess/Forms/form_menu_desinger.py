@@ -161,14 +161,14 @@ class menu():
                 },
                 {
                     "nombre": "Coronacion",
-                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElCaballo.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\Coronacion.png",
                     "descripcion": "Cuando un peón llega al final del tablero, corona, con lo que se convierte en otra pieza. Puedes coronar caballo, alfil, torre o dama. Dado que las damas son la pieza más poderosa, lo más habitual con diferencia es coronar dama.",
                     "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Coronacion.mkv"
                 }
                 ,
                 {
                     "nombre": "Preparar el Tablero",
-                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElCaballo.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\PrepararElTablero.png",
                     "descripcion": "Ahora que sabes cómo mueven las piezas, es hora de preparar el tablero y comenzar la partida. Cada jugador empieza con una casilla blanca en la esquina inferior derecha. Las torres se colocan en las esquinas, seguidas de caballos y después alfiles. Los reyes y damas se colocan en las casillas centrales de la fila trasera, con la dama en la casilla de su color. Todos los peones blancos parten de la 2ª fila y todos los peones negros parten de la 7ª fila.",
                     "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Preparar-El-Tablero.mkv"
                 }
