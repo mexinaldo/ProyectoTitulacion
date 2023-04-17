@@ -7,9 +7,9 @@ import pygame as pygame
 from Chess import ChessEngine
 
 Board_width = Board_height = 710
-MoveLogPanelWidth = 300
+MoveLogPanelWidth = 350
 MoveLogPanelHeight = Board_height
-keyboardactionsWitdth = Board_height
+keyboardactionsWitdth = 710
 keyboardactionHeight = 100
 dimension = 8  # Dimensión del tablero.
 sq_Size = 710 // dimension  # Dimensiones de las casillas.
@@ -114,11 +114,11 @@ def main():
                 if e.key == pygame.K_F11:
                     fullscreen = not fullscreen
                     if fullscreen:
-                        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height),
+                        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight),
                                                          pygame.FULLSCREEN)
                         moveLogFont = pygame.font.SysFont("Helvetica", 20, False, False)
                     else:
-                        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height))
+                        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight))
                         moveLogFont = pygame.font.SysFont("Helvetica", 15, False, False)
 
         if moveMade:
@@ -184,6 +184,7 @@ Draw the squares on the board. the top square is always  light
 def drawBoard(screen):
     global colors
     colors = [pygame.Color("white"), pygame.Color("seagreen")]
+    #
     for r in range(dimension):
         for c in range(dimension):
             color = colors[((r + c) % 2)]
@@ -209,7 +210,7 @@ Draws the move log
 
 
 def drawkeyboardactions(screen, gs, font):
-    keyboardRect = pygame.Rect(0, Board_height, keyboardactionsWitdth, keyboardactionHeight)
+    keyboardRect = pygame.Rect(0, 710, keyboardactionsWitdth, keyboardactionHeight)
     pygame.draw.rect(screen, pygame.Color("black"), keyboardRect)
     mensaje1 = 'Retroceder un movimiento: Tecla "Z"'
     mensaje2 = 'Reiniciar juego: Tecla "R"'
@@ -240,7 +241,7 @@ def drawMoveLog(screen, gs, font):
 
     mensaje1 = "¡Bienvenido al registro de movimientos!"
     mensaje2 = "Aquí se mostrarán los movimientos realizados."
-    mensaje3 = "Haz clic en una pieza y luego en un movimiento válido para registrar tu jugada."
+    mensaje3 = "Haz un movimiento válido para registrar tu jugada."
 
     textObject1 = font.render(mensaje1, True, pygame.Color('white'))
     textObject2 = font.render(mensaje2, True, pygame.Color('white'))
