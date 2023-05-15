@@ -127,7 +127,7 @@ class menu():
                     "nombre": "El Rey y el Objetivo",
                     "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElRey.png",
                     "descripcion": "El ajedrez es un juego emocionante y fácil de aprender. Se juega en un tablero de 8x8  con 64 casillas y 32 piezas. La partida se gana al dar jaque mate (es decir, atrapar) al rey. Aunque el rey es la pieza más importante, no es la más potente. El rey puede mover a cualquier casilla adyacente: arriba, abajo, a los lados o en diagonal.",
-                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Video1.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\El-Rey-Y-El-Objetivo.mkv"
                 },
                 {
                     "nombre": "La Dama",
@@ -163,7 +163,7 @@ class menu():
                     "nombre": "Coronacion",
                     "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\Coronacion.png",
                     "descripcion": "Cuando un peón llega al final del tablero, corona, con lo que se convierte en otra pieza. Puedes coronar caballo, alfil, torre o dama. Dado que las damas son la pieza más poderosa, lo más habitual con diferencia es coronar dama.",
-                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Coronacion.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Coronación.mkv"
                 }
                 ,
                 {
@@ -171,8 +171,20 @@ class menu():
                     "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\PrepararElTablero.png",
                     "descripcion": "Ahora que sabes cómo mueven las piezas, es hora de preparar el tablero y comenzar la partida. Cada jugador empieza con una casilla blanca en la esquina inferior derecha. Las torres se colocan en las esquinas, seguidas de caballos y después alfiles. Los reyes y damas se colocan en las casillas centrales de la fila trasera, con la dama en la casilla de su color. Todos los peones blancos parten de la 2ª fila y todos los peones negros parten de la 7ª fila.",
                     "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Preparar-El-Tablero.mkv"
-                }
+                },
 
+                {
+                    "nombre": "EL lenguaje del ajedrez",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElLenguajeDelAjedrez.png",
+                    "descripcion": "Cada casilla del ajedrez tiene un nombre en base a un sistema de coordenadas. Todas las columnas tienen una letra, de la 'a' a la 'h', que van de izquierda a derecha. Cada fila tiene un número, del 1 al 8, empezando por la primera fila de las blancas. Cada pieza tiene la siguiente inicial: Rey = R. Dama = D. Torre = T. Alfil = A. Caballo = C. Peón - sin inicial. Una jugada se escribe usando la inicial de la pieza seguida de la letra y número de la casilla. Por ejemplo, si el rey va a la casilla f3, escribimos Rf3; si quien va a la casilla f3 es un peón, escribimos solo f3.",
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\El-Lenguaje-Del-Ajedrez.mkv"
+                },
+                {
+                    "nombre": "Mover y Ca",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\PrepararElTablero.png",
+                    "descripcion": "",
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Preparar-El-Tablero.mkv"
+                },
             ]
 
             videos_contenedor = tk.Frame(videos_frame, bg="white")

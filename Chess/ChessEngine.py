@@ -204,39 +204,43 @@ class GameState():
             startRow = self.blackKingLocation[0]
             startCol = self.blackKingLocation[1]
 
+        # Check outwards from king for pins and checks, keep track of pins
         directions = ((-1, 0), (0, -1), (1, 0), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1))
         for j in range(len(directions)):
             d = directions[j]
-            possiblePin = ()  # Se reinician las piezas clavadas.
+            possiblePin = ()  # reset possible pins
             for i in range(1, 8):
                 endRow = startRow + d[0] * i
                 endCol = startCol + d[1] * i
                 if 0 <= endRow < 8 and 0 <= endCol < 8:
                     endPiece = self.board[endRow][endCol]
-                    if endPiece[0] == allyColor:
-                        if possiblePin == ():  # Cuando hay una pieza que está clavada.
+                    if endPiece[0] == allyColor and endPiece[1] != 'K':
+                        if possiblePin == ():  # 1st allied piece could be pinned
                             possiblePin = (endRow, endCol, d[0], d[1])
-                        else:  # Cuando hay dos piezas.
+                        else:  # 2nd allied piece, so no pin or check possible in this direction
                             break
                     elif endPiece[0] == enemyColor:
                         type = endPiece[1]
-                        if (0 <= j <= 3 and type == 'R') or \
-                                (4 <= j <= 7 and type == 'B') or \
+                        # Orthogonally moving enemy piece could be pinned
+                        # against king, if two of them are in line with each other
+                        # and the king.
+                        if (0 <= j <= 3 and type == 'R') or (4 <= j <= 7 and type == 'B') or \
                                 (i == 1 and type == 'P' and (
                                         (enemyColor == 'w' and 6 <= j <= 7) or (enemyColor == 'b' and 4 <= j <= 5))) or \
                                 (type == 'Q') or (i == 1 and type == 'K'):
-                            if possiblePin == ():  # El jaque al haber espacio libre.
+                            if possiblePin == ():  # No piece blocking, so check
                                 inCheck = True
                                 checks.append((endRow, endCol, d[0], d[1]))
                                 break
-                            else:  # Se clava una pieza cuando está en medio de un jaque.
+                            else:  # piece is pinned
                                 pins.append(possiblePin)
                                 break
-                        else:  # En caso de no haber de jaque o amenaza de uno.
+                        else:  # enemy piece doesn't attack king along this line, so no pin or check possible
                             break
-                else:  # Fuera de límites.
+                else:  # off board
                     break
-        # Jaques del caballo.
+
+        # Check for knight checks
         knightMoves = ((-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1))
         for m in knightMoves:
             endRow = startRow + m[0]
@@ -246,6 +250,7 @@ class GameState():
                 if endPiece[0] == enemyColor and endPiece[1] == 'N':  # Cuando el caballo ataca al rey.
                     inCheck = True
                     checks.append((endRow, endCol, m[0], m[1]))
+
         return inCheck, pins, checks
 
     """
@@ -260,8 +265,7 @@ class GameState():
                 if (turn == 'w' and self.whiteToMove) or (
                         turn == 'b' and not self.whiteToMove):  # El bando que tenga el turno.
                     piece = self.board[r][c][1]
-                    self.moveFunctions[piece](r, c,
-                                              moves)  # Llama la función correspondiente al moviento de la pieza en turno. Por ejemplo: si la pieza en turno es el caballo (N), llamará la función que fue asociada al ID.
+                    self.moveFunctions[piece](r, c, moves)  # Llama la función correspondiente al moviento de la pieza en turno. Por ejemplo: si la pieza en turno es el caballo (N), llamará la función que fue asociada al ID.
         return moves
 
     """
