@@ -1,6 +1,7 @@
 """
-Éste archivo se encargará de cargar con los datos, llevar cuenta de los movientos válidos, así como permitirlos.
+Este archivo se encargará de cargar con los datos, llevar cuenta de los movientos válidos, así como permitirlos.
 """
+from tkinter import Tk, Button, Label
 
 
 class gameState():
@@ -28,15 +29,16 @@ class gameState():
         self.staleMate = False
         self.enPassantPossible = ()  # Coordenadas donde la captura al paso sea hecha.
         # Condiciones o entorno en el que el erroque se hace.
-        self.wCastleKingside = True
-        self.wCastleQueenside = True
-        self.bCastleKingside = True
-        self.bCastleQueenside = True
+        self.whiteCastleKingside = True
+        self.whiteCastleQueenside = True
+        self.blackCastleKingside = True
+        self.blackCastleQueenside = True
         self.castleRightsLog = [
-            CastleRights(self.wCastleKingside, self.bCastleKingside, self.wCastleQueenside, self.bCastleQueenside)]
+            CastleRights(self.whiteCastleKingside, self.blackCastleKingside, self.whiteCastleQueenside,
+                         self.blackCastleQueenside)]
 
     """
-    Permite hacer los movimientos que son ya porcesados en la clase Move (No sirve para los movimientos especiales como el enroque, las promociones de peones o las capturas al paso de los mismos).
+    Permite hacer los movimientos que son ya procesados en la clase Move (No sirve para los movimientos especiales como el enroque, las promociones de peones o las capturas al paso de los mismos).
     """
 
     def makeMove(self, move):
@@ -58,25 +60,25 @@ class gameState():
         if move.enPassant:
             self.board[move.startRow][move.endCol] = '--'
         # Promosión del peón.
-        if move.pawnPromotion == True:
-            promotedPiece = input(
-                '\nPromosión del peón a:\nReina (Q), Alfil (B), Caballo (N) o Torre (R).\nIngresa la letra que está entre parentesis pero en minúscula.\nElijo: ')
-            if (promotedPiece == 'q') or (promotedPiece == 'b') or (promotedPiece == 'n') or (promotedPiece == 'r'):
-                self.board[move.endRow][move.endCol] = move.pieceMoved[0] + promotedPiece.upper()
+        if move.pawnPromotion:
+            if self.whiteToMove:
+                from Chess.Forms.PawnPromotionWindow import PawnPromotionWindow
+                root = Tk()
+                promotion_window = PawnPromotionWindow(root)
+                root.mainloop()
+                promotion_piece = promotion_window.piece
             else:
-                error = True
-                while (error == True):
-                    print('\nCódigo erroneo.')
-                    promotedPiece = input(
-                        'Promosión del peón a:\nReina (Q), Alfil (B), Caballo (N) o Torre (R).\nIngresa la letra que está entre parentesis pero en minúscula.\nElijo: ')
-                    if (promotedPiece == 'q') or (promotedPiece == 'b') or (promotedPiece == 'n') or (
-                            promotedPiece == 'r'):
-                        self.board[move.endRow][move.endCol] = move.pieceMoved[0] + promotedPiece.upper()
-                        error = False
+                promotion_piece = 'Q'  # Pieza por defecto para el motor (puedes cambiarla si deseas)
+            # update the board with the selected piece or the default piece
+            self.board[move.endRow][move.endCol] = move.pieceMoved[0] + promotion_piece
+            # make the move and update the board
+            move_made = True
+
         # Actualización de los enroques y su condición.
         self.updateCastleRights(move)
         self.castleRightsLog.append(
-            CastleRights(self.wCastleKingside, self.wCastleQueenside, self.bCastleKingside, self.bCastleQueenside))
+            CastleRights(self.whiteCastleKingside, self.whiteCastleQueenside, self.blackCastleKingside,
+                         self.blackCastleQueenside))
         # Movientos del enroque.
         if move.castle:
             if move.endCol - move.startCol == 2:  # enroque corto.
@@ -108,7 +110,7 @@ class gameState():
                 self.board[move.endRow][move.endCol] = '--'  # Regresa al peón a su sitio original.
                 self.board[move.startRow][move.endCol] = move.pieceCaptured  # Regresa el peón que haya sido capturado.
                 self.enPassantPossible = (
-                move.endRow, move.endCol)  # Habilita la captura al paso para que se realice nuevamente.
+                    move.endRow, move.endCol)  # Habilita la captura al paso para que se realice nuevamente.
             # Retroce el avance de dos casillas del peón.
             if move.pieceMoved[1] == 'P' and abs(move.startRow - move.endRow) == 2:
                 self.enPassantPossible = ()
@@ -116,10 +118,10 @@ class gameState():
             # Restablece las condiciones originales de l torre en caso de hacerse movido.
             self.castleRightsLog.pop()  # remueve la última actualización de los movientos.
             castleRights = self.castleRightsLog[-1]
-            self.wCastleKingside = castleRights.wks
-            self.wCastleQueenside = castleRights.wqs
-            self.bCastleKingside = castleRights.bks
-            self.bCastleQueenside = castleRights.bqs
+            self.whiteCastleKingside = castleRights.wks
+            self.whiteCastleQueenside = castleRights.wqs
+            self.blackCastleKingside = castleRights.bks
+            self.blackCastleQueenside = castleRights.bqs
 
             # Restableciendo el enroque.
             if move.castle:
@@ -179,7 +181,8 @@ class gameState():
         if len(moves) == 0:
             if self.inCheck:
                 self.checkMate = True
-            else:
+        elif len(moves) < 10:
+            if self.inCheck:
                 self.staleMate = True
         else:
             self.checkMate = False
@@ -201,39 +204,40 @@ class gameState():
             startRow = self.blackKingLocation[0]
             startCol = self.blackKingLocation[1]
 
+        # Check outwards from king for pins and checks, keep track of pins
         directions = ((-1, 0), (0, -1), (1, 0), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1))
         for j in range(len(directions)):
             d = directions[j]
-            possiblePin = ()  # Se reinician las piezas clavadas.
+            possiblePin = ()  # reset possible pins
             for i in range(1, 8):
                 endRow = startRow + d[0] * i
                 endCol = startCol + d[1] * i
                 if 0 <= endRow < 8 and 0 <= endCol < 8:
                     endPiece = self.board[endRow][endCol]
-                    if endPiece[0] == allyColor:
-                        if possiblePin == ():  # Cuando hay una pieza que está clavada.
+                    if endPiece[0] == allyColor and endPiece[1] != 'K':
+                        if possiblePin == ():  # 1st allied piece could be pinned
                             possiblePin = (endRow, endCol, d[0], d[1])
-                        else:  # Cuando hay dos piezas.
+                        else:  # 2nd allied piece, so no pin or check possible in this direction
                             break
                     elif endPiece[0] == enemyColor:
                         type = endPiece[1]
-                        if (0 <= j <= 3 and type == 'R') or \
-                                (4 <= j <= 7 and type == 'B') or \
+                        if (0 <= j <= 3 and type == 'R') or (4 <= j <= 7 and type == 'B') or \
                                 (i == 1 and type == 'P' and (
                                         (enemyColor == 'w' and 6 <= j <= 7) or (enemyColor == 'b' and 4 <= j <= 5))) or \
                                 (type == 'Q') or (i == 1 and type == 'K'):
-                            if possiblePin == ():  # El jaque al haber espacio libre.
+                            if possiblePin == ():  # No piece blocking, so check
                                 inCheck = True
                                 checks.append((endRow, endCol, d[0], d[1]))
                                 break
-                            else:  # Se clava una pieza cuando está en medio de un jaque.
+                            else:  # piece is pinned
                                 pins.append(possiblePin)
                                 break
-                        else:  # En caso de no haber de jaque o amenaza de uno.
+                        else:  # enemy piece doesn't attack king along this line, so no pin or check possible
                             break
-                else:  # Fuera de límites.
+                else:  # off board
                     break
-        # Jaques del caballo.
+
+        # Check for knight checks
         knightMoves = ((-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1))
         for m in knightMoves:
             endRow = startRow + m[0]
@@ -257,8 +261,7 @@ class gameState():
                 if (turn == 'w' and self.whiteToMove) or (
                         turn == 'b' and not self.whiteToMove):  # El bando que tenga el turno.
                     piece = self.board[r][c][1]
-                    self.moveFunctions[piece](r, c,
-                                              moves)  # Llama la función correspondiente al moviento de la pieza en turno. Por ejemplo: si la pieza en turno es el caballo (N), llamará la función que fue asociada al ID.
+                    self.moveFunctions[piece](r, c, moves)  # Llama la función correspondiente al moviento de la pieza en turno. Por ejemplo: si la pieza en turno es el caballo (N), llamará la función que fue asociada al ID.
         return moves
 
     """
@@ -266,8 +269,7 @@ class gameState():
     """
 
     def getPawnMoves(self, r, c, moves):
-        """Esto lo que hace es verificar el estado de la pieza y si detecta que por
-        encima de ella hay un posible jaque al rey, entonces la bloquea."""
+
         piecePinned = False
         pinDirection = ()
         for i in range(len(self.pins) - 1, -1, -1):
@@ -336,8 +338,7 @@ class gameState():
                 endRow = r + d[0] * i
                 endCol = c + d[1] * i
                 if 0 <= endRow < 8 and 0 <= endCol < 8:  # Dentro del tablero.
-                    if not piecePinned or pinDirection == d or pinDirection == (
-                    -d[0], -d[1]):  # Evita mover la pieza en caso de que esté clavada.
+                    if not piecePinned or pinDirection == d or pinDirection == (-d[0], -d[1]):
                         endPiece = self.board[endRow][endCol]
                         if endPiece == "--":  # Espacio libre y válido.
                             moves.append(Move((r, c), (endRow, endCol), self.board))
@@ -390,7 +391,7 @@ class gameState():
                 endCol = c + d[1] * i
                 if 0 <= endRow < 8 and 0 <= endCol < 8:  # Dentro del tablero.
                     if not piecePinned or pinDirection == d or pinDirection == (
-                    -d[0], -d[1]):  # Evita mover la pieza en caso de que esté clavada.
+                            -d[0], -d[1]):  # Evita mover la pieza en caso de que esté clavada.
                         endPiece = self.board[endRow][endCol]
                         if endPiece == "--":  # Espacio libre y válido.
                             moves.append(Move((r, c), (endRow, endCol), self.board))
@@ -433,11 +434,11 @@ class gameState():
         inCheck = self.sqUnderAttack(r, c, allyColor)
         if inCheck:  # Evita el enroque por amenaza de jaque.
             return
-        if (self.whiteToMove and self.wCastleKingside) or (
-                not self.whiteToMove and self.bCastleKingside):  # enroque corto.
+        if (self.whiteToMove and self.whiteCastleKingside) or (
+                not self.whiteToMove and self.blackCastleKingside):  # enroque corto.
             self.getKingsideCastleMoves(r, c, moves, allyColor)
-        if (self.whiteToMove and self.wCastleQueenside) or (
-                not self.whiteToMove and self.bCastleQueenside):  # enroque largo.
+        if (self.whiteToMove and self.whiteCastleQueenside) or (
+                not self.whiteToMove and self.blackCastleQueenside):  # enroque largo.
             self.getQueensideCastleMoves(r, c, moves, allyColor)
 
     def getKingsideCastleMoves(self, r, c, moves, allyColor):  # enroque corto.
@@ -488,24 +489,24 @@ class gameState():
         return False
 
     def updateCastleRights(self, move):
-        if move.pieceMoved == 'wK':  # Si se mueve el rey blanco, se cancela todo enroque.
-            self.wCastleKingside = False
-            self.wCastleQueenside = False
-        elif move.pieceMoved == 'bK':  # Si se mueve el rey negro, se cancela todo enroque.
-            self.bCastleKingside = False
-            self.bCastleQueenside = False
+        if move.pieceMoved == 'wK':  # Si se mueve el rey blanco, se cancela el enroque
+            self.whiteCastleKingside = False
+            self.whiteCastleQueenside = False
+        elif move.pieceMoved == 'bK':  # Si se mueve el rey negro, se cancela el enroque
+            self.blackCastleKingside = False
+            self.blackCastleQueenside = False
         elif move.pieceMoved == 'wR':  # Si se mueve la torre negra.
             if move.startRow == 7:
                 if move.startCol == 7:  # Se cancela el enroque corto.
-                    self.wCastleKingside = False
+                    self.whiteCastleKingside = False
                 elif move.startCol == 0:  # Se cancela el enroque largo.
-                    self.wCastleQueenside = False
+                    self.whiteCastleQueenside = False
         elif move.pieceMoved == 'bR':  # Si se mueve la torre negra.
             if move.startRow == 0:
                 if move.startCol == 7:  # Se cancela el enroque corto.
-                    self.bCastleKingside = False
+                    self.blackCastleKingside = False
                 elif move.startCol == 0:  # Se cancela el enroque largo.
-                    self.bCastleQueenside = False
+                    self.blackCastleQueenside = False
 
 
 class CastleRights():
@@ -535,6 +536,7 @@ class Move():
         self.castle = castle
         if enPassant:
             self.pieceCaptured = 'bP' if self.pieceMoved == 'wP' else 'wP'  # La captura al paso capturando el peón contrario.
+        self.isCapture = self.pieceCaptured != "--"
         self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
 
     def __eq__(self, other):
@@ -543,7 +545,24 @@ class Move():
         return False
 
     def getChessNotation(self):
-        return self.getRankFile(self.startRow, self.startCol) + ', ' + self.getRankFile(self.endRow, self.endCol)
+        return self.getRankFile(self.startRow, self.startCol) + ',' + self.getRankFile(self.endRow, self.endCol)
 
     def getRankFile(self, r, c):
         return self.colsToFiles[c] + self.rowsToRanks[r]
+
+    def __str__(self):
+        if self.castle:
+            return "O-O" if self.endCol == 6 else "O-O-O"
+
+        endSquare = self.getRankFile(self.endRow, self.endCol)
+        # pawn moves
+        if self.pieceMoved[1] == 'p':
+            if self.isCapture:
+                return self.colsToFiles[self.startCol] + "x" + endSquare
+            else:
+                return endSquare
+
+        moveString = self.pieceMoved[1]
+        if self.isCapture:
+            moveString += 'x'
+        return moveString + endSquare

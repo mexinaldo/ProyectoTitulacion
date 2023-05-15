@@ -9,6 +9,7 @@ import Chess.util.encoding_decoding as end_dec
 from Chess.persistence.model import Auth_User
 from Chess.Forms.form_login_designer import FormLoginDesigner
 from Chess.Forms.registration import FormRegister
+from Chess.Forms.form_registration_designer import FormRegisterDesigner
 
 
 class FormLogin(FormLoginDesigner):
@@ -18,6 +19,7 @@ class FormLogin(FormLoginDesigner):
         super().__init__()
 
     def verificar(self):
+        username = self.usuario.get()
         user_db: Auth_User = self.auth_repository.getUserByUserName(
             self.usuario.get())
         if self.isUser(user_db):

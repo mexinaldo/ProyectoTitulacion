@@ -221,9 +221,6 @@ class GameState():
                             break
                     elif endPiece[0] == enemyColor:
                         type = endPiece[1]
-                        # Orthogonally moving enemy piece could be pinned
-                        # against king, if two of them are in line with each other
-                        # and the king.
                         if (0 <= j <= 3 and type == 'R') or (4 <= j <= 7 and type == 'B') or \
                                 (i == 1 and type == 'P' and (
                                         (enemyColor == 'w' and 6 <= j <= 7) or (enemyColor == 'b' and 4 <= j <= 5))) or \
@@ -250,7 +247,6 @@ class GameState():
                 if endPiece[0] == enemyColor and endPiece[1] == 'N':  # Cuando el caballo ataca al rey.
                     inCheck = True
                     checks.append((endRow, endCol, m[0], m[1]))
-
         return inCheck, pins, checks
 
     """
@@ -273,8 +269,7 @@ class GameState():
     """
 
     def getPawnMoves(self, r, c, moves):
-        """Esto lo que hace es verificar el estado de la pieza y si detecta que por
-        encima de ella hay un posible jaque al rey, entonces la bloquea."""
+
         piecePinned = False
         pinDirection = ()
         for i in range(len(self.pins) - 1, -1, -1):
@@ -343,8 +338,7 @@ class GameState():
                 endRow = r + d[0] * i
                 endCol = c + d[1] * i
                 if 0 <= endRow < 8 and 0 <= endCol < 8:  # Dentro del tablero.
-                    if not piecePinned or pinDirection == d or pinDirection == (
-                            -d[0], -d[1]):  # Evita mover la pieza en caso de que esté clavada.
+                    if not piecePinned or pinDirection == d or pinDirection == (-d[0], -d[1]):
                         endPiece = self.board[endRow][endCol]
                         if endPiece == "--":  # Espacio libre y válido.
                             moves.append(Move((r, c), (endRow, endCol), self.board))
@@ -495,7 +489,7 @@ class GameState():
         return False
 
     def updateCastleRights(self, move):
-        if move.pieceMoved == 'wK':  # Si se mueve el rey blanco, se cancela  el enroque
+        if move.pieceMoved == 'wK':  # Si se mueve el rey blanco, se cancela el enroque
             self.whiteCastleKingside = False
             self.whiteCastleQueenside = False
         elif move.pieceMoved == 'bK':  # Si se mueve el rey negro, se cancela el enroque

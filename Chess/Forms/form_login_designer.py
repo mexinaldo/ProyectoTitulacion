@@ -4,13 +4,14 @@ from tkinter.font import BOLD
 import Chess.util.generic as utl
 
 
+
 class FormLoginDesigner:
 
     def verificar(self):
         pass
 
     def userRegister(self):
-        pass
+       pass
 
     def __init__(self):
         self.ventana = tk.Tk()

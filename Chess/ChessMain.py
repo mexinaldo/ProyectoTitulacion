@@ -26,12 +26,7 @@ def loadImages():
     for piece in pieces:
         images[piece] = pygame.transform.scale(pygame.image.load("C:/proyectoChess/Chess/images/" + piece + ".png"),
                                                (sq_Size, sq_Size))
-        # NOTE: we access an image by saying  'IMAGES['wp']'
 
-
-'''
-the main driver for our code. this will handle  user input and updating the graphics
-'''
 
 
 def main():
@@ -135,9 +130,9 @@ def main():
                 drawEndGameText(screen, "Jaque")
             else:
                 if gs.whiteToMove:
-                    drawEndGameText(screen, "negras ganan por jaque mate")
+                    drawEndGameText(screen, "Victoria de las negras por jaque mate.")
                 else:
-                    drawEndGameText(screen, "blancas ganan por jaque mate")
+                    drawEndGameText(screen, "Victoria de las negras por jaque mate.")
                 gameOver = True
 
         clock.tick(max_fps)

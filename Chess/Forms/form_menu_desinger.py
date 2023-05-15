@@ -98,6 +98,7 @@ class menu():
             MenuToChess()
 
         def salir():
+            self.root.destroy()
             from Chess.Forms.form_login import FormLogin
             FormLogin()
 
@@ -239,8 +240,13 @@ class menu():
             lb2 = tk.Label(IA_frame, text='Rival: PC', font=('Bold', 20), bg='#fcfcfc')
             lb2.pack(pady=10)
 
-            btn = tk.Button(IA_frame, text="!Juega¡", font=('Bold', 20), fg='#fcfcfc', bg='#3CB371')
+            btn = tk.Button(IA_frame, text="!Juega¡", font=('Bold', 20), fg='#fcfcfc', bg='#3CB371', command=IaGame)
             btn.pack(pady=20, padx=50)
+
+        def IaGame():
+            self.root.destroy()
+            from Chess.IAChess.IAMain import innit
+            innit()
 
         def configuration_page():
             configuration_frame = tk.Frame(main_frame, bg='#fcfcfc')
@@ -249,15 +255,7 @@ class menu():
             titulo_lb = tk.Label(configuration_frame, text='Configuración', font=('Bold', 60), bg='#fcfcfc')
             titulo_lb.pack(pady=20)
 
-            username_lb = tk.Label(configuration_frame, text='Nombre de usuario:', font=('Bold', 20), bg='#fcfcfc')
-            username_lb.pack(pady=10)
-
-            # Aquí agregamos un label que mostrará el nombre de usuario recuperado de la base de datos de SQLite
-            # Por supuesto, debes reemplazar "nombre_de_usuario" con el valor real recuperado de la base de datos
-            usuario_lb = tk.Label(configuration_frame, text='nombre_de_usuario', font=('Bold', 20), bg='#fcfcfc')
-            usuario_lb.pack(pady=10)
-
-            salir_btn = tk.Button(configuration_frame, text="Salir", font=('Bold', 20), fg='#fcfcfc', bg='#3CB371')
+            salir_btn = tk.Button(configuration_frame, text="Salir", font=('Bold', 20), fg='#fcfcfc', bg='#3CB371', command=salir)
             salir_btn.pack(pady=20, padx=50)
 
         def reproducir_video(ruta):
