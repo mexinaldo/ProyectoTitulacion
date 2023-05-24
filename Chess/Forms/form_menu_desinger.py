@@ -3,29 +3,6 @@ from tkinter import messagebox
 from Chess.prueba import Prueba
 import sqlite3
 
-def borrar_cuenta(username, password):
- # Mostrar cuadro de diálogo de confirmación
-    respuesta = messagebox.askyesno("Confirmar", "¿Estás seguro de que deseas borrar tu cuenta?")
-
-    if respuesta:
-    # Conexión a la base de datos
-        conn = sqlite3.connect('login.sqlite')
-        cursor = conn.cursor()
-
-    # Borrar el usuario de la base de datos
-        cursor.execute("DELETE FROM usuarios WHERE id=?", (username,))
-        conn.commit()
-
-        # Cerrar la conexión a la base de datos
-        conn.close()
-
-        # Mostrar mensaje de éxito
-        messagebox.showinfo("Éxito", "Tu cuenta ha sido borrada exitosamente.")
-
-    # Lógica adicional después de borrar la cuenta, como redireccionar a otra página o cerrar la aplicación
-    else:
-        # Mostrar mensaje de cancelación
-        messagebox.showinfo("Cancelado", "La operación ha sido cancelada.")
 
 class menu():
     def __init__(self):
@@ -404,7 +381,7 @@ class menu():
             from Chess.IAChess.IAMain import innit
             innit()
 
-        def configuration_page(username, password):
+        def configuration_page():
             configuration_frame = tk.Frame(main_frame, bg='#fcfcfc')
             configuration_frame.pack(pady=100)
 
@@ -415,10 +392,7 @@ class menu():
                                   command=salir)
             salir_btn.pack(pady=30, padx=50)
 
-            borrar_btn = tk.Button(configuration_frame, text="Borrar cuenta", font=('Bold', 20), fg='#ff0000', bg='#3CB371', command=lambda: borrar_cuenta(username, password))
 
-
-            borrar_btn.pack(pady=30, padx=50)
 
         def reproducir_video(ruta):
             filename = ruta

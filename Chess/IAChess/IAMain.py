@@ -1,36 +1,33 @@
-"""
-Esto es el main. El archivo responsable de inicializarlo todo y de catar los inputs del jugador.
-"""
 import pygame as pygame
-
 import time
 from Chess.IAChess import IntArt
+from pygame import mixer
 from Chess.IAChess import IAEngine
-import tkinter
 
 Board_width = Board_height = 710
 MoveLogPanelWidth = 350
 MoveLogPanelHeight = Board_height
 keyboardactionsWitdth = 710
 keyboardactionHeight = 100
-dimension = 8  # Dimensión del tablero.
-sq_Size = 710 // dimension  # Dimensiones de las casillas.
-max_fps = 60  # Para las animaciones.
+dimension = 8
+sq_Size = 710 // dimension
+max_fps = 60
 images = {}
-
-
-
 
 """
 Para inicializar las imagenes de las piezas.
 """
-def loadImage ():
+def loadImage():
     pieces = ['bP', 'bR', 'bN', 'bB', 'bQ', 'bK', 'wP', 'wR', 'wN', 'wB', 'wQ', 'wK']
     for piece in pieces:
-        images[piece] = pygame.transform.scale(pygame.image.load("C:/proyectoChess/Chess/images/" + piece + ".png"), (sq_Size, sq_Size))
+        images[piece] = pygame.transform.scale(pygame.image.load("C:/proyectoChess/Chess/images/" + piece + ".png"),
+                                              (sq_Size, sq_Size))
+
 
 def main():
     pygame.init()
+    pygame.mixer.init()
+
     fullscreen = False
     if fullscreen:
         screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight),
@@ -47,45 +44,49 @@ def main():
     loadImage()
     run = True
     sqSelect = ()
-    playerClick = [] #Conteo de los clicks por parejas.
+    playerClick = []  # Conteo de los clicks por parejas.
     gameOver = False
-    playerOne = True #Si el jugador juega blancas, será True, si no, no.
-    playerTwo = False #Igual que con playerOne, pero orientado a las negras.
-    while run: #Para correr el juego.
+    playerOne = True  # Si el jugador juega blancas, será True, si no, no.
+    playerTwo = False  # Igual que con playerOne, pero orientado a las negras.
+    victory_sound_played = False
+    move = None
+    while run:  # Para correr el juego.
         humanTurn = (gs.whiteToMove and playerOne) or (not gs.whiteToMove and playerTwo)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 run = False
             elif e.type == pygame.MOUSEBUTTONDOWN:
                 if not gameOver and humanTurn:
-                    location = pygame.mouse.get_pos() #La posición del mouse en el eje X e Y.
+                    location = pygame.mouse.get_pos()  # La posición del mouse en el eje X e Y.
                     col = location[0] // sq_Size
                     row = location[1] // sq_Size
-                    if sqSelect == (row, col): #El usurio hace click dos veces en el mismo sitio y se limpian.
+                    if sqSelect == (row, col):  # El usuario hace click dos veces en el mismo sitio y se limpian.
                         sqSelect = ()
                         playerClick = []
                     else:
                         sqSelect = (row, col)
                         playerClick.append(sqSelect)
-                    if len(playerClick) == 2: #Después de 2 clicks.
+                    if len(playerClick) == 2:  # Después de 2 clicks.
                         move = IAEngine.Move(playerClick[0], playerClick[1], gs.board)
                         print(move.getChessNotation())
 
                         for i in range(len(validMoves)):
-                            if move == validMoves[i]: #Para verificar la validez de un movimiento.
+                            if move == validMoves[i]:  # Para verificar la validez de un movimiento.
                                 gs.makeMove(validMoves[i])
                                 moveMade = True
                                 sqSelect = ()
                                 playerClick = []
                         if not moveMade:
                             playerClick = [sqSelect]
-            elif e.type == pygame.KEYDOWN: #Se deshace el movimiento hecho de pulsarse z.
+            elif e.type == pygame.KEYDOWN:  # Se deshace el movimiento hecho de pulsarse z.
                 if e.key == pygame.K_z:
                     gs.undoMove()
                     moveMade = True
                     animate = False
                     gameOver = False
-                if e.key == pygame.K_r: #Se reinicia el tablero.
+                    victory_sound_played = False
+
+                if e.key == pygame.K_r:  # Se reinicia el tablero.
                     gs = IAEngine.gameState()
                     validMoves = gs.getValidMoves()
                     sqSelect = ()
@@ -93,6 +94,7 @@ def main():
                     moveMade = True
                     animate = False
                     gameOver = False
+                    victory_sound_played = False
 
                 if e.key == pygame.K_e:
                     print("salir")
@@ -104,14 +106,16 @@ def main():
                 if e.key == pygame.K_F11:
                     fullscreen = not fullscreen
                     if fullscreen:
-                        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight),
-                                                         pygame.FULLSCREEN)
+                        screen = pygame.display.set_mode(
+                            (Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight),
+                            pygame.FULLSCREEN)
                         moveLogFont = pygame.font.SysFont("Helvetica", 20, False, False)
                     else:
-                        screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight))
+                        screen = pygame.display.set_mode(
+                            (Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight))
                         moveLogFont = pygame.font.SysFont("Helvetica", 15, False, False)
 
-        #Movimientos de la I.A.
+        # Movimientos de la I.A.
         if not gameOver and not humanTurn:
             time.sleep(2)
             AIMove = IntArt.findBestMove(gs, validMoves)
@@ -123,22 +127,29 @@ def main():
         if moveMade:
             if animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
+                mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\movimiento.wav")
+                mixer.music.play()
             validMoves = gs.getValidMoves()
             moveMade = False
             animate = False
         drawGameStage(screen, gs, validMoves, sqSelect, moveLogFont)
-        #Cuando termine la partida en empate con un jaque mate.
-        if gs.checkMate:
-            gameOver = True
-            if gs.whiteToMove:
-                drawText(screen, 'Victoria de las negras por jaque mate.')
+        if gs.checkMate or gs.staleMate:
+            if gs.staleMate:
+                drawText(screen, "Jaque")
             else:
-                drawText(screen, 'Victoria de las negras por jaque mate.')
-        elif gs.staleMate:
-            drawText(screen, 'Jaque.')
+                if gs.whiteToMove:
+                    drawText(screen, "Victoria de las negras por jaque mate.")
+                else:
+                    drawText(screen, "Victoria de las blancas por jaque mate.")
+            gameOver = True
+            if not victory_sound_played:
+                mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\win.mp3")
+                mixer.music.play()
+                victory_sound_played = True
 
         clock.tick(max_fps)
         pygame.display.flip()
+
 
 """
 Resalte de las casillas disponibles conforme al moviento de las piezas.

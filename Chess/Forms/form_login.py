@@ -7,7 +7,7 @@ from Chess.persistence.model import Auth_User
 from Chess.Forms.form_login_designer import FormLoginDesigner
 from Chess.Forms.registration import FormRegister
 from Chess.Forms.form_registration_designer import FormRegisterDesigner
-from Chess.Forms.form_menu_desinger import borrar_cuenta
+#from Chess.Forms.form_menu_desinger import borrar_cuenta
 
   # Importa la clase o función específica
 
@@ -39,7 +39,8 @@ class FormLogin(FormLoginDesigner):
         b_password = end_dec.decrypt(user.password)
         if password == b_password:
             self.ventana.destroy()
-            borrar_cuenta(user.username, password)  # Pasar los valores a la función form_menu_desinger
+            menu()
+          #  borrar_cuenta(user.username, password)  # Pasar los valores a la función form_menu_desinger
         else:
             messagebox.showerror(message="La contraseña no es correcta", title="Mensaje")
             self.password.delete(0, END)

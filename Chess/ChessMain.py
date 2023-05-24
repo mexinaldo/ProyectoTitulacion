@@ -4,6 +4,7 @@ Este es nuestro archivo de controlador principal. Será responsable de manejar l
 """
 
 import pygame as pygame
+from pygame import mixer
 from Chess import ChessEngine
 
 Board_width = Board_height = 710
@@ -31,6 +32,10 @@ def loadImages():
 
 def main():
     pygame.init()
+    pygame.mixer.init()
+
+
+
     fullscreen = False
     if fullscreen:
         screen = pygame.display.set_mode((Board_width + MoveLogPanelWidth, Board_height + keyboardactionHeight),
@@ -49,6 +54,8 @@ def main():
     sqSelected = ()  # no square is selected, keep track of the last click of the user (tuple:(row, col))
     playerClicks = []  # keep track of player clicks (two tuples: [(6,6), (4,4)])
     gameOver = False
+    victory_sound_played = False
+    move = None
     while running:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
@@ -89,6 +96,7 @@ def main():
                     moveMade = True
                     animate = False
                     gameOver = False
+                    victory_sound_played = False
 
                 if e.key == pygame.K_r:
                     gs = ChessEngine.GameState()
@@ -98,6 +106,7 @@ def main():
                     moveMade = False
                     animate = False
                     gameOver = False
+                    victory_sound_played = False
 
                 if e.key == pygame.K_e:
                     print("salir")
@@ -119,6 +128,12 @@ def main():
         if moveMade:
             if animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
+                if move.pieceCaptured != '--':
+                    mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\comer.mp3")
+                    mixer.music.play()
+                else:
+                    mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\movimiento.wav")
+                    mixer.music.play()
             validMoves = gs.getValidMoves()
             moveMade = False
             animate = False
@@ -131,9 +146,14 @@ def main():
             else:
                 if gs.whiteToMove:
                     drawEndGameText(screen, "Victoria de las negras por jaque mate.")
+
                 else:
                     drawEndGameText(screen, "Victoria de las negras por jaque mate.")
                 gameOver = True
+                if not victory_sound_played:
+                    mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\win.mp3")
+                    mixer.music.play()
+                    victory_sound_played = True
 
         clock.tick(max_fps)
         pygame.display.flip()
