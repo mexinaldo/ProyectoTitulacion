@@ -1,8 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
-from Chess import util as utl
-from Chess.util import generic as generic
-
+from tkinter import ttk, messagebox
+from tkinter.font import BOLD
+import Chess.util.generic as utl
+from Chess.ChessMain import innit
 
 
 class FormRegisterDesigner():
@@ -11,10 +11,10 @@ class FormRegisterDesigner():
         self.ventana = tk.Toplevel()
         self.ventana.title('Resgitro de usuario')
         self.ventana.config(bg='#fcfcfc')
-        generic.centrar_ventana(self.ventana, 600, 450)
+        utl.centrar_ventana(self.ventana, 600, 450)
 
-        logo = utl.leer_imagen(" C:\\proyectoChess\\images\\logo.png", (712, 508))
-
+        logo = utl.leer_imagen("C:\proyectoChess\Chess\images\logo.png", (712, 508))
+        # frame_logo
         frame_logo = tk.Frame(self.ventana, bd=0, width=200,
                               relief=tk.SOLID, padx=10, pady=10, bg='#F87474')
         frame_logo.pack(side="left", expand=tk.YES, fill=tk.BOTH)

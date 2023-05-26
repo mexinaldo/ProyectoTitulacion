@@ -1,5 +1,7 @@
 import tkinter as tk
+from tkinter import messagebox
 from Chess.prueba import Prueba
+import sqlite3
 
 
 class menu():
@@ -64,7 +66,7 @@ class menu():
         welcome_label.pack(pady=50)
 
         # Cargamos la imagen
-        image = tk.PhotoImage(file="/Chess/images/estrategico.png")
+        image = tk.PhotoImage(file="C:\\proyectoChess\\Chess\\images\\estrategico.png")
         image_label = tk.Label(main_frame, image=image, bg="#fcfcfc")
         image_label.image = image  # Necesario para que la imagen no se borre al ser cargada
         image_label.pack()
@@ -76,7 +78,7 @@ class menu():
             lb = tk.Label(home_frame, text='Nueva Partida', font=('Bold', 60), bg='#fcfcfc')
             lb.pack(pady=20)
 
-            imagen = tk.PhotoImage(file='/Chess/images/ajedrez.png')
+            imagen = tk.PhotoImage(file='C:\\proyectoChess\\Chess\\images\\ajedrez.png')
             imagen = imagen.subsample(3, 3)
             label_imagen = tk.Label(home_frame, image=imagen, bg='#fcfcfc')
             label_imagen.image = imagen
@@ -125,38 +127,38 @@ class menu():
             videos = [
                 {
                     "nombre": "El Rey y el Objetivo",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\ElRey.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElRey.png",
                     "descripcion": "El ajedrez es un juego emocionante y fácil de aprender. Se juega en un tablero de 8x8  con 64 casillas y 32 piezas. La partida se gana al dar jaque mate (es decir, atrapar) al rey. Aunque el rey es la pieza más importante, no es la más potente. El rey puede mover a cualquier casilla adyacente: arriba, abajo, a los lados o en diagonal.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\El-Rey-Y-El-Objetivo.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\El-Rey-Y-El-Objetivo.mkv"
                 },
                 {
                     "nombre": "La Dama",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\LaReina.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\LaReina.png",
                     "descripcion": "El rey es la pieza más importante del ajedrez, pero la dama es la más poderosa. "
                                    "La dama puede mover adelante, atrás, a los lados y en diagonal, igual que el rey."
                                    " Sin embargo, a diferencia del rey, la dama puede mover tantas casillas como "
                                    "quiera en todas estas direcciones. Lo único que no puede hacer la dama es pasar"
                                    " por encima de otras piezas.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\LaDama.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\LaDama.mkv"
                 },
                 {
                     "nombre": "La Torre",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\LaTorre.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\LaTorre.png",
                     "descripcion": "La torre puede mover adelante, atrás y a los lados, como una dama. Sin embargo,"
                                    " a diferencia de la dama, la torre no puede mover en diagonal.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\La-Torre.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\La-Torre.mkv"
                 },
                 {
                     "nombre": "El Alfil",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\ElAlfil.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElAlfil.png",
                     "descripcion": "El alfil puede mover en diagonal, como la dama, pero no puede mover adelante,"
                                    " atrás o a los lados. Cada bando empieza con dos alfiles, uno en una casilla "
                                    "blanca y otro en una casilla negra.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\El-Alfil.mp4"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\El-Alfil.mp4"
                 },
                 {
                     "nombre": "El Caballo",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\ElCaballo.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElCaballo.png",
                     "descripcion": "El caballo es la única pieza de ajedrez que no mueve en línea recta. El caballo "
                                    "mueve dos casillas en una dirección y una casilla en otra dirección. Por ejemplo,"
                                    " un caballo puede mover dos casillas hacia delante y una casilla a la izquierda."
@@ -164,42 +166,42 @@ class menu():
                                    " abajo. Siempre sigue ese patrón de dos más una, que tiene forma de L. Otra cosa"
                                    " que hace especial al caballo es que es la única pieza capaz de saltar por "
                                    "encima de otras.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\El-Caballo.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\El-Caballo.mkv"
                 },
                 {
                     "nombre": "El Peon",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\ElPeon.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElPeon.png",
                     "descripcion": "Los peones mueven una casilla adelante en cada movimiento. Sin embargo, los "
                                    "peones tienen un par de movimientos especiales. En su primer movimiento, un "
                                    "peón puede mover una casilla o dos. Los peones solo pueden capturar una pieza"
                                    " que está una casilla por delante en diagonal. Además, los peones son la única"
                                    " pieza que solo puede mover hacia adelante.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\El-Peon.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\El-Peon.mkv"
                 },
                 {
                     "nombre": "Coronacion",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\Coronacion.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\Coronacion.png",
                     "descripcion": "Cuando un peón llega al final del tablero, corona, con lo que se convierte en "
                                    "otra pieza. Puedes coronar caballo, alfil, torre o dama. Dado que las damas son"
                                    " la pieza más poderosa, lo más habitual con diferencia es coronar dama.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Coronación.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Coronación.mkv"
                 }
                 ,
                 {
                     "nombre": "Preparar el Tablero",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\PrepararElTablero.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\PrepararElTablero.png",
                     "descripcion": "Ahora que sabes cómo mueven las piezas, es hora de preparar el tablero y comenzar "
                                    "la partida. Cada jugador empieza con una casilla blanca en la esquina inferior "
                                    "derecha. Las torres se colocan en las esquinas, seguidas de caballos y después "
                                    "alfiles. Los reyes y damas se colocan en las casillas centrales de la fila trasera,"
                                    " con la dama en la casilla de su color. Todos los peones blancos parten de la 2ª"
                                    " fila y todos los peones negros parten de la 7ª fila.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Preparar-El-Tablero.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Preparar-El-Tablero.mkv"
                 },
 
                 {
                     "nombre": "EL lenguaje del ajedrez",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\ElLenguajeDelAjedrez.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElLenguajeDelAjedrez.png",
                     "descripcion": "Cada casilla del ajedrez tiene un nombre en base a un sistema de coordenadas."
                                    " Todas las columnas tienen una letra, de la 'a' a la 'h', que van de izquierda"
                                    " a derecha. Cada fila tiene un número, del 1 al 8, empezando por la primera fila"
@@ -208,11 +210,11 @@ class menu():
                                    "la inicial de la pieza seguida de la letra y número de la casilla. Por ejemplo,"
                                    " si el rey va a la casilla f3, escribimos Rf3; si quien va a la casilla f3 es "
                                    "un peón, escribimos solo f3.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\El-Lenguaje-Del-Ajedrez.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\El-Lenguaje-Del-Ajedrez.mkv"
                 },
                 {
                     "nombre": "Mover y Capturar",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\MoveryCapturar.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\MoveryCapturar.png",
                     "descripcion": "Una gran estrategia para ayudarte a ganar partidas de ajedrez es capturar "
                                    "piezas rivales. La mayoría de capturas se hacen del mismo modo que la pieza "
                                    "mueve normalmente. Pero recuerda que los peones capturan en una casilla por "
@@ -221,62 +223,62 @@ class menu():
                                    "a la que mueve. Por ejemplo, si una dama captura en a2, escribimos Dxa2. "
                                    "Anotamos una coronación añadiendo '=' y la letra de la pieza que coronamos."
                                    " Por ejemplo, si un peón corona dama en d8, escribimos d8=D.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Mover-y-Capturar.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Mover-y-Capturar.mkv"
                 },
                 {
                     "nombre": "Jaque",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\Jaque.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\Jaque.png",
                     "descripcion": "Jaque significa que un bando amenaza con capturar el rey rival. En ajedrez nunca "
                                    "se llega a capturar al rey rival, así que el otro bando tiene que salir del jaque."
                                    " Para anotar un jaque, añadimos un \"+\" al final. Por ejemplo, si un caballo "
                                    "mueve a g6 y da jaque, escribimos Cg6+.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Jaque.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Jaque.mkv"
                 },
                 {
                     "nombre": "Salir de un Jaque",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\SalirDeUnJaque.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\SalirDeUnJaque.png",
                     "descripcion": "Cuando estás en jaque, debes salir del jaque. Las formas de salir del jaque son "
                                    "mover el rey, bloquear el jaque con otra pieza, o capturar la pieza que da jaque.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Salir-Del-Jaque.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Salir-Del-Jaque.mkv"
                 },
                 {
                     "nombre": "Jaque Mate",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\JaqueMate.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\JaqueMate.png",
                     "descripcion": "Ganas cuando tu oponente está en jaque y no puede escapar. ¡Jaque mate!",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Jaque-Mate.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Jaque-Mate.mkv"
                 },
                 {
                     "nombre": "El Jaque Mate más rápido",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\ElJaqueMateMasRapido.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ElJaqueMateMasRapido.png",
                     "descripcion": "¿Te has preguntado alguna vez cuál es el jaque mate más rápido posible? Solo "
                                    "requiere dos movimientos. Intenta seguir esta secuencia: 1. f3 e5 2. g4 Dh4#. "
                                    "La notación para el jaque mate es #.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\El-Jaque-Mate-Mas-Rapido.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\El-Jaque-Mate-Mas-Rapido.mkv"
                 },
                 {
                     "nombre": "Rey ahogado",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\ReyAhogado.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\ReyAhogado.png",
                     "descripcion": "El rey ahogado se da cuando no hay jugadas posibles pero ninguno de los reyes está "
                                    "en jaque. El rey ahogado son tablas, incluso si uno de los jugadores tiene muchas "
                                    "más piezas sobre el tablero. Un buen ejemplo de rey ahogado sucede cuando un bando"
                                    " solo tiene el rey, que no está en jaque, pero no se puede mover porque cualquier"
                                    " intento de mover lo pondría en jaque.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Rey-Ahogado.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Rey-Ahogado.mkv"
                 },
                 {
                     "nombre": "Otras tablas",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\OtrasTablas.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\OtrasTablas.png",
                     "descripcion": "No todas las partidas de ajedrez se ganan o se pierden. A veces terminan en tablas."
                                    " Estas son las maneras en que eso puede suceder: 1. Rey ahogado. 2. Ambos jugadores "
                                    "acuerdan tablas. 3. Si la misma posición exacta se ha repetido tres veces, "
                                    "cualquiera de los dos jugadores puede reclamar tablas. 4. Si se juegan 50 "
                                    "movimientos seguidos sin una jugada de peón o una captura, cualquiera de los dos "
                                    "jugadores puede reclamar tablas.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Otras-Tablas.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Otras-Tablas.mkv"
                 },
                 {
                     "nombre": "Captura al paso",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\CapturaAlPaso.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\CapturaAlPaso.png",
                     "descripcion": "Esta es la regla más inusual del ajedrez: apréndetela bien. La captura al paso se "
                                    "da cuando un peón acaba de mover dos casillas. En la jugada inmediatamente "
                                    "posterior, el oponente puede capturar ese peón con uno suyo como si ese peón solo"
@@ -284,30 +286,30 @@ class menu():
                                    " peón blanco en h5 podría capturarlo moviendo a g6. Esto solo se puede hacer en la"
                                    " siguiente jugada. Si se hace otro movimiento antes, ya no se puede capturar"
                                    " al paso.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Captura-Al-Paso.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Captura-Al-Paso.mkv"
                 },
                 {
                     "nombre": "Enroque",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\Enroque.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\Enroque.png",
                     "descripcion": "El enroque es un movimiento especial para proteger tu rey y activar tu torre. Es la "
                                    "única jugada del ajedrez en la que puedes mover dos piezas. El rey mueve dos casillas"
                                    " a izquierda o derecha y la torre se cruza con el rey a la casilla adyacente a él. "
                                    "Solo puedes enrocar si ni la torre ni el rey han movido antes y no hay piezas de por"
                                    " medio. Tampoco puedes enrocar cuando estás en jaque, ni si el enroque te pone en "
                                    "jaque, ni si pasas por un jaque al enrocar.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Enroque.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Enroque.mkv"
                 },
                 {
                     "nombre": "Encontrar el movimiento correcto",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\EncontrarElMovimientoCorrecto.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\EncontrarElMovimientoCorrecto.png",
                     "descripcion": "Hay docenas de movimientos posibles cada vez. ¿Cómo encontrar el correcto? "
                                    "Cada turno, tendrás que valorar tus opciones y las de tu oponente. Presta especial "
                                    "atención a los jaques, las capturas y las amenazas.",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Encontrar-El-Movimiento-Correcto.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Encontrar-El-Movimiento-Correcto.mkv"
                 },
                 {
                     "nombre": "Jugar una partida",
-                    "imagen": "C:\\proyectoChess\\aprender\\images\\JugarUnaPartida.png",
+                    "imagen": "C:\\proyectoChess\\Chess\\aprender\\images\\JugarUnaPartida.png",
                     "descripcion": "Mira una partida de ajedrez completa con cada movimiento explicado. 1. e4 c6 Ambos"
                                    " bandos mueven peones hacia el centro. 2. d4 d5 Ambos bandos colocan un segundo peón "
                                    "en el centro y permiten salir a sus piezas. 3. Cc3 dxe4 Las blancas defienden un "
@@ -315,7 +317,7 @@ class menu():
                                    "desarrollan un caballo. 5. Ac4 Cgf6 Las blancas desarrollan un alfil y las negras "
                                    "desarrollan un caballo. 6. Cg5 h6 Las blancas atacan el peón de f7 pero las negras"
                                    "no ven la amenaza. 7. Af7# ¡Jaque mate!",
-                    "ruta": "C:\\proyectoChess\\aprender\\videos\\Jugar-Una-Partida.mkv"
+                    "ruta": "C:\\proyectoChess\\Chess\\aprender\\videos\\Jugar-Una-Partida.mkv"
                 },
             ]
 
@@ -359,7 +361,7 @@ class menu():
             lb = tk.Label(IA_frame, text='Partida Contra PC', font=('Bold', 60), bg='#fcfcfc')
             lb.pack(pady=20)
 
-            imagen = tk.PhotoImage(file='/Chess/images/estrategico.png')
+            imagen = tk.PhotoImage(file='C:\\proyectoChess\\Chess\\images\\estrategico.png')
             imagen = imagen.subsample(3, 3)
             label_imagen = tk.Label(IA_frame, image=imagen, bg='#fcfcfc')
             label_imagen.image = imagen

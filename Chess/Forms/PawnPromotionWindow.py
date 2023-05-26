@@ -13,10 +13,10 @@ class PawnPromotionWindow:
         self.parent.geometry("400x150")
 
         # load and resize images
-        queen_image = Image.open("/Chess/images/wQ.png").resize((64, 64))
-        bishop_image = Image.open("/Chess/images/wB.png").resize((64, 64))
-        knight_image = Image.open("/Chess/images/wN.png").resize((64, 64))
-        rook_image = Image.open("/Chess/images/wR.png").resize((64, 64))
+        queen_image = Image.open("C:\\proyectoChess\\Chess\\images\\wQ.png").resize((64, 64))
+        bishop_image = Image.open("C:\\proyectoChess\\Chess\\images\\wB.png").resize((64, 64))
+        knight_image = Image.open("C:\\proyectoChess\\Chess\\images\\wN.png").resize((64, 64))
+        rook_image = Image.open("C:\\proyectoChess\\Chess\\images\\wR.png").resize((64, 64))
 
         # convert images to PhotoImage
         queen_image = ImageTk.PhotoImage(queen_image)

@@ -2,7 +2,7 @@ from Chess.Forms.form_registration_designer import FormRegisterDesigner
 from Chess.persistence.auth_user_repository import AuthUserRepositroy
 from Chess.persistence.model import Auth_User
 from tkinter import messagebox
-from Chess.util import encoding_decoding as encoding_decoding
+import Chess.util.encoding_decoding as end_dec
 import tkinter as tk
 
 
@@ -22,7 +22,7 @@ class FormRegister(FormRegisterDesigner):
                 self.usuario.get())
 
             if not (self.isUserRegister(user_db)):
-                user.password = encoding_decoding.encrypted(self.password.get())
+                user.password = end_dec.encrypted(self.password.get())
                 self.auth_repository.insertUser(user)
                 messagebox.showinfo(
                     message="Se registro el usuario", title="Mensaje")

@@ -61,7 +61,14 @@ class gameState():
             self.board[move.startRow][move.endCol] = '--'
         # Promosión del peón.
         if move.pawnPromotion:
-            promotion_piece = 'Q'  # Pieza por defecto para el motor (puedes cambiarla si deseas)
+            if self.whiteToMove:
+                from Chess.Forms.PawnPromotionWindow import PawnPromotionWindow
+                root = Tk()
+                promotion_window = PawnPromotionWindow(root)
+                root.mainloop()
+                promotion_piece = promotion_window.piece
+            else:
+                promotion_piece = 'Q'  # Pieza por defecto para el motor (puedes cambiarla si deseas)
             # update the board with the selected piece or the default piece
             self.board[move.endRow][move.endCol] = move.pieceMoved[0] + promotion_piece
             # make the move and update the board

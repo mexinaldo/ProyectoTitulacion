@@ -1,12 +1,12 @@
 from tkinter import messagebox, END
+from Chess.prueba import Prueba
 from Chess.Forms.form_menu_desinger import menu
 from Chess.persistence.auth_user_repository import AuthUserRepositroy
-from Chess.util import encoding_decoding as encoding_decoding
+import Chess.util.encoding_decoding as end_dec
 from Chess.persistence.model import Auth_User
 from Chess.Forms.form_login_designer import FormLoginDesigner
 from Chess.Forms.registration import FormRegister
-
-
+from Chess.Forms.form_registration_designer import FormRegisterDesigner
 #from Chess.Forms.form_menu_desinger import borrar_cuenta
 
   # Importa la clase o función específica
@@ -36,7 +36,7 @@ class FormLogin(FormLoginDesigner):
         return status
 
     def isPassword(self, password: str, user: Auth_User):
-        b_password = encoding_decoding.decrypt(user.password)
+        b_password = end_dec.decrypt(user.password)
         if password == b_password:
             self.ventana.destroy()
             menu()

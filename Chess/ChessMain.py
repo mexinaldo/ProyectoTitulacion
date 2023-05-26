@@ -5,7 +5,8 @@ Este es nuestro archivo de controlador principal. Será responsable de manejar l
 
 import pygame as pygame
 from pygame import mixer
-from Chess import ChessEngine
+import ChessEngine
+
 
 Board_width = Board_height = 710
 MoveLogPanelWidth = 350
@@ -112,9 +113,8 @@ def main():
                     print("salir")
                     pygame.display.quit()
                     pygame.quit()
-                    from Chess.util import ChessToMenu
-                    ChessToMenu()
-
+                    from Chess.Forms.form_menu_desinger import menu
+                    menu()
                 if e.key == pygame.K_F11:
                     fullscreen = not fullscreen
                     if fullscreen:
@@ -129,10 +129,10 @@ def main():
             if animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
                 if move.pieceCaptured != '--':
-                    mixer.music.load("aprender/sounds/comer.mp3")
+                    mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\comer.mp3")
                     mixer.music.play()
                 else:
-                    mixer.music.load("aprender/sounds/movimiento.wav")
+                    mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\movimiento.wav")
                     mixer.music.play()
             validMoves = gs.getValidMoves()
             moveMade = False
@@ -151,7 +151,7 @@ def main():
                     drawEndGameText(screen, "Victoria de las negras por jaque mate.")
                 gameOver = True
                 if not victory_sound_played:
-                    mixer.music.load("aprender/sounds/win.mp3")
+                    mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\win.mp3")
                     mixer.music.play()
                     victory_sound_played = True
 

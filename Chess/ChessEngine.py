@@ -1,7 +1,7 @@
 """
 Este archivo se encargará de cargar con los datos, llevar cuenta de los movientos válidos, así como permitirlos.
 """
-from tkinter import Tk
+from tkinter import Tk, Button, Label
 
 
 class GameState():

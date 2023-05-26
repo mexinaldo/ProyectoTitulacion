@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.font import BOLD
-from Chess import util as utl
-from Chess.util import generic as generic
+import Chess.util.generic as utl
+
 
 
 class FormLoginDesigner:
@@ -19,11 +19,10 @@ class FormLoginDesigner:
         self.ventana.geometry('800x500')
         self.ventana.config(bg='#fcfcfc')
 
-        generic.centrar_ventana(self.ventana, 800, 500)
+        utl.centrar_ventana(self.ventana, 800, 500)
 
-        logo = generic.leer_imagen("C:\\proyectoChess\\Chess\\images\\logo.png", (712, 508))
+        logo = utl.leer_imagen("C:\\proyectoChess\\Chess\\images\\logo.png", (712, 508))
         # frame_logo
-
 
         frame_logo = tk.Frame(self.ventana, bd=0, width=300, relief=tk.SOLID, padx=10, pady=10, bg='#000000')
         frame_logo.pack(side="left", expand=tk.YES, fill=tk.BOTH)

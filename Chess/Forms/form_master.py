@@ -1,5 +1,6 @@
 import tkinter as tk
-from Chess import util as utl
+from tkinter.font import BOLD
+import Chess.util.generic as utl
 
 
 class MasterPanel:
