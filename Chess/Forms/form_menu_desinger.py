@@ -1,7 +1,7 @@
 import tkinter as tk
-from tkinter import messagebox
+import random
+
 from Chess.prueba import Prueba
-import sqlite3
 
 
 class menu():
@@ -26,7 +26,7 @@ class menu():
             page()
 
         options_frame = tk.Frame(self.root, bg='#ff6363')
-        home_btn = tk.Button(options_frame, text="Home", font=('Bold', 15), fg='#fcfcfc', bd=0, bg='#ff6363',
+        home_btn = tk.Button(options_frame, text="Juego Local", font=('Bold', 15), fg='#fcfcfc', bd=0, bg='#ff6363',
                              command=lambda: indicate(home_indicate, home_page))
         home_btn.place(x=20, y=100)
         home_indicate = tk.Label(options_frame, text='', bg='#ff6363')
@@ -381,7 +381,80 @@ class menu():
             from Chess.IAChess.IAMain import innit
             innit()
 
+        datos_interesantes = {
+            "Dato 1": "El ajedrez se originó en la India en el siglo VI.",
+            "Dato 2": "El juego de ajedrez tal como lo conocemos hoy en día se desarrolló en Europa en el siglo XV.",
+            "Dato 3": "El ajedrez se juega en un tablero de 8x8 casillas, lo que suma un total de 64 casillas.",
+            "Dato 4": "El ajedrez tiene seis diferentes tipos de piezas: el rey, la reina, las torres, los alfiles, los caballos y los peones.",
+            "Dato 5": "El rey es la pieza más importante del juego. El objetivo del juego es amenazar el rey del oponente con jaque mate.",
+            "Dato 6": "El ajedrez es considerado uno de los juegos más antiguos y complejos del mundo.",
+            "Dato 7": "El título de Gran Maestro es el más alto rango que se puede obtener en ajedrez.",
+            "Dato 8": "La partida de ajedrez más corta posible se conoce como 'mate del loco' y termina después de solo dos movimientos.",
+            "Dato 9": "El jugador más joven en convertirse en Gran Maestro fue Sergey Karjakin, a la edad de 12 años y 7 meses.",
+            "Dato 10": "El primer programa de ajedrez que derrotó a un campeón mundial humano fue Deep Blue de IBM, que venció a Garry Kasparov en 1997.",
+            "Dato 11": "El jugador de ajedrez más famoso y reconocido de todos los tiempos es Bobby Fischer.",
+            "Dato 12": "Existen diferentes estilos de apertura en el ajedrez, como la apertura española, la defensa siciliana y la apertura italiana.",
+            "Dato 13": "La partida de ajedrez más larga registrada duró más de 20 horas y terminó en empate.",
+            "Dato 14": "El ajedrez es reconocido como un deporte por el Comité Olímpico Internacional.",
+            "Dato 15": "En el ajedrez, el jaque mate más rápido posible es el 'mate del loco', que ocurre después de solo dos movimientos.",
+            "Dato 16": "El ajedrez ha sido utilizado como herramienta educativa para mejorar la concentración, la toma de decisiones y las habilidades de resolución de problemas.",
+            "Dato 17": "Hay más de 10^120 posibles juegos de ajedrez, lo que hace que el ajedrez sea un juego extremadamente complejo.",
+            "Dato 18": "El ajedrez es considerado un deporte mental y requiere habilidades cognitivas como la memoria, la lógica y la estrategia.",
+            "Dato 19": "El ajedrez es jugado por millones de personas en todo el mundo y es uno de los juegos más populares y reconocidos.",
+            "Dato 20": "El ajedrez ha sido utilizado en la investigación científica para estudiar la toma de decisiones y la inteligencia artificial.",
+            "Beneficio 1": "El ajedrez Mejora la capacidad de concentración y atención.",
+            "Beneficio 2": "El ajedrez Desarrolla habilidades de pensamiento crítico y resolución de problemas.",
+            "Beneficio 3": "El ajedrez Estimula la creatividad y la imaginación.",
+            "Beneficio 4": "El ajedrez Promueve la toma de decisiones estratégicas.",
+            "Beneficio 5": "El ajedrez Fomenta el desarrollo de habilidades de planificación y organización.",
+            "Beneficio 6": "El ajedrez Ayuda a desarrollar habilidades matemáticas y numéricas.",
+            "Beneficio 7": "El ajedrez Promueve la paciencia y la perseverancia.",
+            "Beneficio 8": "El ajedrez Estimula el desarrollo de habilidades de memoria y concentración.",
+            "Beneficio 9": "El ajedrez Mejora la capacidad de visualización espacial.",
+            "Beneficio 10": "El ajedrez Desarrolla habilidades de análisis y evaluación.",
+            "Beneficio 11": "El ajedrez Fomenta la capacidad de anticipación y predicción de movimientos.",
+            "Beneficio 12": "El ajedrez Ayuda a desarrollar habilidades de autoevaluación y autocrítica.",
+            "Beneficio 13": "El ajedrez Promueve la equidad y el juego limpio.",
+            "Beneficio 14": "El ajedrez Estimula el desarrollo de habilidades sociales y de comunicación.",
+            "Beneficio 15": "El ajedrez Mejora la capacidad de manejar la presión y el estrés.",
+            "Beneficio 16": "El ajedrez Desarrolla habilidades de análisis y comprensión de patrones.",
+            "Beneficio 17": "El ajedrez Fomenta la capacidad de establecer metas y objetivos a largo plazo.",
+            "Beneficio 18": "El ajedrez Ayuda a desarrollar habilidades de autocontrol y regulación emocional.",
+            "Beneficio 19": "El ajedrez Promueve el trabajo en equipo y la colaboración en torneos y competencias.",
+            "Beneficio 20": "El ajedrez Estimula el desarrollo de habilidades de razonamiento lógico.",
+            "Apoyo 1": "Cada partida de ajedrez es una oportunidad para aprender y mejorar.",
+            "Apoyo 2": "No importa si ganas o pierdes, lo importante es disfrutar del juego y aprender de cada partida.",
+            "Apoyo 3": "El ajedrez es un juego de paciencia y perseverancia, sigue practicando y verás tu progreso.",
+            "Apoyo 4": "Cada movimiento en el ajedrez es una decisión importante, confía en tu intuición y habilidades.",
+            "Apoyo 5": "El ajedrez es un juego de estrategia, piensa varios pasos adelante y sorprende a tu oponente.",
+            "Apoyo 6": "No te desanimes por una derrota, utiliza cada partida como una oportunidad para aprender y crecer.",
+            "Apoyo 7": "El ajedrez es un juego de aprendizaje constante, siempre hay algo nuevo por descubrir.",
+            "Apoyo 8": "No tengas miedo de tomar riesgos en el ajedrez, a veces las jugadas audaces son las más efectivas.",
+            "Apoyo 9": "Mantén la calma y la concentración durante tus partidas, la mente clara te ayudará a tomar mejores decisiones.",
+            "Apoyo 10": "El ajedrez es un juego que requiere práctica y dedicación, persevera y alcanzarás grandes logros.",
+            "Apoyo 11": "Cada partida de ajedrez es una oportunidad para superar tus propios límites y demostrar tu talento.",
+            "Apoyo 12": "No te compares con otros jugadores, el ajedrez es una competencia contigo mismo para mejorar cada día.",
+            "Apoyo 13": "Recuerda que en el ajedrez siempre hay soluciones, busca nuevas ideas y enfoques para enfrentar los desafíos.",
+            "Apoyo 14": "Celebra tus pequeños éxitos en el ajedrez, cada mejora y aprendizaje son motivo de orgullo.",
+            "Apoyo 15": "Aprovecha cada momento en el tablero para expresar tu creatividad y estilo único de juego.",
+            "Apoyo 16": "El ajedrez es un juego de resiliencia, nunca te rindas y lucha hasta el final de cada partida.",
+            "Apoyo 17": "El ajedrez te enseña a tomar decisiones bajo presión, utiliza cada situación como una oportunidad para brillar.",
+            "Apoyo 18": "La constancia y la dedicación son clave en el ajedrez, practica regularmente y verás los resultados.",
+            "Apoyo 19": "Confía en tus habilidades y conocimientos en el ajedrez, tienes el potencial para lograr grandes cosas.",
+            "Apoyo 20": "Disfruta del proceso de aprendizaje en el ajedrez, cada partida es una experiencia única y emocionante."
+
+        }
+
+        dato_lb = None
+
+        def mostrar_dato_interesante():
+            global dato_lb
+            dato = random.choice(list(datos_interesantes.keys()))
+            descripcion = datos_interesantes[dato]
+            dato_lb.configure(text=f" {descripcion}")
+
         def configuration_page():
+            global dato_lb
             configuration_frame = tk.Frame(main_frame, bg='#fcfcfc')
             configuration_frame.pack(pady=100)
 
@@ -392,7 +465,10 @@ class menu():
                                   command=salir)
             salir_btn.pack(pady=30, padx=50)
 
+            dato_lb = tk.Label(configuration_frame, text="", font=('Bold', 16), bg='#fcfcfc')
+            dato_lb.pack(pady=10)
 
+            mostrar_dato_interesante()
 
         def reproducir_video(ruta):
             filename = ruta

@@ -78,7 +78,7 @@ def main():
                         playerClicks.append(sqSelected)  # append for both 1st and  2nd clicks
                     if len(playerClicks) == 2:  # this is after 2nd click
                         move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
-                        print(move.getChessNotation())
+
 
                         for i in range(len(validMoves)):
                             if move == validMoves[i]:
@@ -148,7 +148,7 @@ def main():
                     drawEndGameText(screen, "Victoria de las negras por jaque mate.")
 
                 else:
-                    drawEndGameText(screen, "Victoria de las negras por jaque mate.")
+                    drawEndGameText(screen, "Victoria de las blancas por jaque mate.")
                 gameOver = True
                 if not victory_sound_played:
                     mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\win.mp3")
@@ -229,7 +229,7 @@ def drawkeyboardactions(screen, gs, font):
     pygame.draw.rect(screen, pygame.Color("black"), keyboardRect)
     mensaje1 = 'Retroceder un movimiento: Tecla "Z"'
     mensaje2 = 'Reiniciar juego: Tecla "R"'
-    mensaje3 = 'salir del juego: Tecla "E"'
+    mensaje3 = 'Salir del juego: Tecla "E"'
 
     textObject1 = font.render(mensaje1, True, pygame.Color('white'))
     textObject2 = font.render(mensaje2, True, pygame.Color('white'))

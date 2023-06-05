@@ -1,10 +1,7 @@
-"""
-Este archivo se encargará de cargar con los datos, llevar cuenta de los movientos válidos, así como permitirlos.
-"""
-from tkinter import Tk, Button, Label
 
 
-class gameState():
+
+class GameState():
     def __init__(self):
         self.board = [
             ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
@@ -27,8 +24,7 @@ class gameState():
         self.checks = []
         self.checkMate = False
         self.staleMate = False
-        self.enPassantPossible = ()  # Coordenadas donde la captura al paso sea hecha.
-        # Condiciones o entorno en el que el erroque se hace.
+        self.enPassantPossible = ()
         self.whiteCastleKingside = True
         self.whiteCastleQueenside = True
         self.blackCastleKingside = True
@@ -60,19 +56,13 @@ class gameState():
         if move.enPassant:
             self.board[move.startRow][move.endCol] = '--'
         # Promosión del peón.
-        if move.pawnPromotion:
-            if self.whiteToMove:
-                from Chess.Forms.PawnPromotionWindow import PawnPromotionWindow
-                root = Tk()
-                promotion_window = PawnPromotionWindow(root)
-                root.mainloop()
-                promotion_piece = promotion_window.piece
-            else:
-                promotion_piece = 'Q'  # Pieza por defecto para el motor (puedes cambiarla si deseas)
-            # update the board with the selected piece or the default piece
-            self.board[move.endRow][move.endCol] = move.pieceMoved[0] + promotion_piece
-            # make the move and update the board
-            move_made = True
+        if move.pawnPromotion == True:
+            promotion_piece = "Q"
+            if promotion_piece:
+                # update the board with the selected piece
+                self.board[move.endRow][move.endCol] = move.pieceMoved[0] + promotion_piece
+                # make the move and update the board
+                move_made = True
 
         # Actualización de los enroques y su condición.
         self.updateCastleRights(move)
@@ -115,7 +105,7 @@ class gameState():
             if move.pieceMoved[1] == 'P' and abs(move.startRow - move.endRow) == 2:
                 self.enPassantPossible = ()
 
-            # Restablece las condiciones originales de l torre en caso de hacerse movido.
+            # Restablece las condiciones originales de la torre en caso de hacerse movido.
             self.castleRightsLog.pop()  # remueve la última actualización de los movientos.
             castleRights = self.castleRightsLog[-1]
             self.whiteCastleKingside = castleRights.wks

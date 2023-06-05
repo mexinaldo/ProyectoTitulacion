@@ -27,8 +27,7 @@ class GameState():
         self.checks = []
         self.checkMate = False
         self.staleMate = False
-        self.enPassantPossible = ()  # Coordenadas donde la captura al paso sea hecha.
-        # Condiciones o entorno en el que el erroque se hace.
+        self.enPassantPossible = ()
         self.whiteCastleKingside = True
         self.whiteCastleQueenside = True
         self.blackCastleKingside = True
@@ -115,7 +114,7 @@ class GameState():
             if move.pieceMoved[1] == 'P' and abs(move.startRow - move.endRow) == 2:
                 self.enPassantPossible = ()
 
-            # Restablece las condiciones originales de l torre en caso de hacerse movido.
+            # Restablece las condiciones originales de la torre en caso de hacerse movido.
             self.castleRightsLog.pop()  # remueve la última actualización de los movientos.
             castleRights = self.castleRightsLog[-1]
             self.whiteCastleKingside = castleRights.wks
