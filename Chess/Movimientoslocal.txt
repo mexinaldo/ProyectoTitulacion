@@ -1,0 +1,6 @@
+1. Pf4  1. Pe6  2. Pe4  2. Pd6  
+3. Pd4  3. Pc5  4. Pc4  4. Pxd4  
+5. Pc5  5. Pxc5  6. Pe5  6. Pd3  
+7. Pb3  7. Pd2  8. Qxd2  8. Qxd2  
+9. Kxd2  9. Pc4  10. Bxc4  10. Pf5  
+11. Pxf6  11. Pe5  12. Bb5  

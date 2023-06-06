@@ -2,7 +2,7 @@ import random
 
 pieceScore = {"K": 0, "Q": 10, "R": 5, "B": 3, "N": 3, "P": 1}
 checkmate = 1000
-stalemate = 0
+stalemate = 50
 DEPTH = 5
 
 """

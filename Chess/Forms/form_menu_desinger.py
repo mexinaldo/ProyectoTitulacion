@@ -1,5 +1,6 @@
 import tkinter as tk
 import random
+from tkinter import scrolledtext
 
 from Chess.prueba import Prueba
 
@@ -461,7 +462,7 @@ class menu():
             titulo_lb = tk.Label(configuration_frame, text='Configuración', font=('Bold', 60), bg='#fcfcfc')
             titulo_lb.pack(pady=20)
 
-            salir_btn = tk.Button(configuration_frame, text="Salir", font=('Bold', 20), fg='#fcfcfc', bg='#3CB371',
+            salir_btn = tk.Button(configuration_frame, text="Salir", font=('Bold', 20), fg='#fcfcfc', bg='#ff0000',
                                   command=salir)
             salir_btn.pack(pady=30, padx=50)
 
@@ -469,13 +470,37 @@ class menu():
             dato_lb.pack(pady=10)
 
             mostrar_dato_interesante()
+            ver_movimientos_btn = tk.Button(configuration_frame, text="Ver ultima partida contra la PC", font=('Bold', 20),
+                                            fg='#fcfcfc', bg='#3CB371',
+                                            command=verMovimientos)
+            ver_movimientos_btn.pack(pady=30, padx=50)
+
+            ver_movimientos_btn = tk.Button(configuration_frame, text="Ver ultima partida local", font=('Bold', 20),
+                                            fg='#fcfcfc', bg='#3CB371',
+                                            command=verMovimientoslocal)
+            ver_movimientos_btn.pack(pady=30, padx=50)
 
         def reproducir_video(ruta):
             filename = ruta
             Prueba(filename)
 
+        def verMovimientos():
+            with open("movimientos.txt", "r") as file:
+                movimientos = file.read()
+                mostrar_ventana(movimientos)
+        def verMovimientoslocal():
+            with open("Movimientoslocal.txt", "r") as file:
+                movimientos = file.read()
+                mostrar_ventana(movimientos)
+        def mostrar_ventana(contenido):
+            ventana = tk.Toplevel()
+            ventana.title("Movimientos")
 
+            text_widget = scrolledtext.ScrolledText(ventana, width=80, height=30)
+            text_widget.insert(tk.END, contenido)
+            text_widget.pack()
 
+            ventana.mainloop()
 
         self.root.mainloop()
 

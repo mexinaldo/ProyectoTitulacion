@@ -403,7 +403,7 @@ class GameState():
         allyColor = "w" if self.whiteToMove else "b"
         for m in range(8):
             endRow = r + rowMoves[m]
-            endCol = c + colMoves[m]
+            endCol= c + colMoves[m]
             if 0 <= endRow < 8 and 0 <= endCol < 8:
                 endPiece = self.board[endRow][endCol]
                 if endPiece[0] != allyColor:  # Tanto para el desplazamiento como para la captura.
@@ -432,9 +432,10 @@ class GameState():
             self.getQueensideCastleMoves(r, c, moves, allyColor)
 
     def getKingsideCastleMoves(self, r, c, moves, allyColor):  # enroque corto.
-        if (self.board[r][c + 1] == '--' and self.board[r][c + 2] == '--') and (
-                not self.sqUnderAttack(r, c + 1, allyColor) and not self.sqUnderAttack(r, c + 2, allyColor)):
-            moves.append(Move((r, c), (r, c + 2), self.board, castle=True))
+        if c + 2 < len(self.board[r]) and c + 1 < len(self.board[r]):
+            if (self.board[r][c + 1] == '--' and self.board[r][c + 2] == '--') and (
+                    not self.sqUnderAttack(r, c + 1, allyColor) and not self.sqUnderAttack(r, c + 2, allyColor)):
+                moves.append(Move((r, c), (r, c + 2), self.board, castle=True))
 
     def getQueensideCastleMoves(self, r, c, moves, allyColor):  # enroque largo.
         if (self.board[r][c - 1] == '--' and self.board[r][c - 2] == '--' and self.board[r][c - 3] == '--') and (

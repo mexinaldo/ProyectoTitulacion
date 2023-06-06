@@ -125,6 +125,7 @@ def main():
             validMoves = gs.getValidMoves()
             mixer.music.load("C:\\proyectoChess\\Chess\\aprender\\sounds\\movimiento.wav")
             mixer.music.play()
+            guardarMovimientos(gs.moveLog)
             moveMade = False
             animate = False
             if animate:
@@ -298,6 +299,13 @@ def drawText(screen, text):
     screen.blit(textObj, textLocation)
     textObj = font.render(text, False, pygame.Color('Gray'))
     screen.blit(textObj, textLocation.move(2, 2))
+
+def guardarMovimientos(moveLog):
+    with open("movimientos.txt", "w") as file:
+        for i, move in enumerate(moveLog):
+            if i % 4 == 0 and i > 0:
+                file.write("\n")
+            file.write(f"{i // 2 + 1}. {move}  ")
 
 
 class innit():
